@@ -65,6 +65,24 @@ service lanovo_camera {{.Camera}}
 {{- end}}
     socket lanovo-camera stream 0666 root root
     disabled
+
+# The internet block for network.internet "local", with its allowlist in
+# /data/misc/lanovo/egress.conf; under "open" and "quiet" this only removes it. netd declares OUTPUT
+# afresh when it starts, so this runs again every time netd does. A config that does not load leaves
+# the chain unhooked and the display as it was.
+service lanovo_egress {{.Binary}} egress apply
+    user root
+    group root inet net_admin net_raw
+{{- if .OnSystem}}
+    seclabel u:r:su:s0
+{{- else}}
+    seclabel u:r:init:s0
+{{- end}}
+    disabled
+    oneshot
+
+on property:init.svc.netd=running
+    start lanovo_egress
 {{- if not .OnSystem}}
 
 service lanovo_widevine {{.Root}}/bin/android.hardware.drm@1.0-service.widevine
