@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	shareddhcp "github.com/ygelfand/libcountertop/pkg/network/dhcp"
 	sharedcomponent "github.com/ygelfand/libcountertop/pkg/runtime/component"
 	"github.com/ygelfand/libcountertop/pkg/runtime/service"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
@@ -47,9 +48,19 @@ func Get() *Clock {
 
 func (c *Clock) Restore(config.Config) { c.Clock.Restore() }
 
-func servers() []net.IP {
-	if lease := dhcp.Get().Lease(); lease != nil {
+func servers() []net.IP { return timeServers(dhcp.Get().Lease()) }
+
+// timeServers are the NTP servers DHCP offers, or else the gateway, which on most home networks
+// answers NTP itself. The shared clock tries the public pool after them, so a gateway that does
+// not serve time still leaves the clock set.
+func timeServers(lease *shareddhcp.Lease) []net.IP {
+	switch {
+	case lease == nil:
+		return nil
+	case len(lease.NTP) > 0:
 		return lease.NTP
+	case lease.Router != nil:
+		return []net.IP{lease.Router}
 	}
 	return nil
 }

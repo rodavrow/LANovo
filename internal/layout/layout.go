@@ -71,6 +71,10 @@ const (
 	CastEngineDir   = StateDir + "/engine"
 	CastEngineState = StateDir + "/engine-state"
 
+	// The egress allowlist, editable without a rebuild; see internal/egress.
+	EgressConfigPath = StateDir + "/egress.conf"
+	EgressService    = "lanovo_egress"
+
 	// init sends stderr to /dev/null.
 	CrashPath = StateDir + "/crash"
 

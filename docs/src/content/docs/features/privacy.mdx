@@ -1,6 +1,6 @@
 ---
 title: Privacy switches
-description: The microphone mute, camera shutter and Settings PIN.
+description: The microphone mute, camera shutter, Settings PIN and internet access.
 ---
 
 The microphone mute and camera shutter are physical switches. Neither LANovo nor Home Assistant
@@ -35,3 +35,29 @@ hour. If you forget the PIN, clear **Settings Lock** (`lock_pin`) in Home Assist
 This locks the on-screen Settings menu, not the dashboard, apps, Home Assistant controls or the
 web page. Browser access uses its own generated **Admin password**, found under **Settings →
 Network & internet → Web access**; see [Web page](/use/web/).
+
+## Internet access
+
+**Settings → Network & internet → Internet access** (`select.<device>_internet_access`) sets how
+much of the internet the display may reach. It takes effect at once; no restart is needed.
+
+| Level | What it stops | What still reaches the internet |
+|---|---|---|
+| **Open** (default) | Nothing | Everything, as before |
+| **Quiet** | The Cast receiver's Google lookups (the revocation list and each app's page), and the cast engine's own background traffic: Safe Browsing, field trials, push, spell-check downloads, translation, metrics. The engine also drops the web-security exceptions only Google-hosted cast apps need | Updates from GitHub, speech models and wake words, photos, radar, lyrics, YouTube |
+| **Local only** | Everything Quiet stops, and every connection to an address outside the local network | Only the local network and the networks you add |
+
+Under **Quiet** and **Local only**, the Cast receiver can't ask Google where an app's page is, so
+casting to it works only for an app it already looked up since lanovod last started; this includes
+casting from Home Assistant, which uses Google's default media receiver. Music Assistant over
+Sendspin and AirPlay don't use Google and work under every level.
+
+**Local only** loads a firewall on the display. It allows private IPv4 and IPv6, link-local,
+multicast (for mDNS and cast discovery), DHCP and the display's own IPv6 /64, and rejects the
+rest, so blocked calls fail at once rather than hang. To reach something else, add a line such as
+`allow 203.0.113.0/24` to `/data/misc/lanovo/egress.conf`, then run `lanovod egress apply` on the
+display or change the setting. `log 6` there logs up to six rejected packets a minute to the
+kernel log (`dmesg | grep lanovo_egress`); `log 0` stops it.
+
+Time comes from the NTP server DHCP offers, or else from the router; the public pool is tried
+only when neither answers.
