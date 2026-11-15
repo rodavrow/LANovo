@@ -13,9 +13,11 @@ REPO ?= ygelfand/LANovo
 RELEASES ?= https://github.com/$(REPO)/releases
 
 BUILDVARS := github.com/ygelfand/LANovo/internal/layout
+UPDATEVARS := github.com/ygelfand/LANovo/internal/update
 LDFLAGS := -X '$(BUILDVARS).Version=$(VERSION)' \
 	-X '$(BUILDVARS).GitCommit=$(GIT_COMMIT)' \
 	-X '$(BUILDVARS).BuildDate=$(BUILD_DATE)' \
+	-X '$(UPDATEVARS).repo=https://github.com/$(REPO)' \
 	$(if $(COUNTERTOP_FILES_URL),-X 'github.com/ygelfand/libcountertop/pkg/network/releases.files=$(COUNTERTOP_FILES_URL)')
 
 comma := ,
