@@ -19,6 +19,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/media/playback"
 	sharedcomponent "github.com/ygelfand/libcountertop/pkg/runtime/component"
 	"github.com/ygelfand/libcountertop/pkg/runtime/control/castcmd"
+	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 	sharedclock "github.com/ygelfand/libcountertop/pkg/system/clock"
 
 	"github.com/ygelfand/LANovo/internal/board"
@@ -26,6 +27,7 @@ import (
 	"github.com/ygelfand/LANovo/internal/config"
 	"github.com/ygelfand/LANovo/internal/feature/clock"
 	"github.com/ygelfand/LANovo/internal/feature/dhcp"
+	"github.com/ygelfand/LANovo/internal/feature/network"
 	"github.com/ygelfand/LANovo/internal/feature/playout"
 	"github.com/ygelfand/LANovo/internal/feature/volume"
 	"github.com/ygelfand/LANovo/internal/feature/web"
@@ -61,10 +63,11 @@ var tuning = sync.OnceValue(func() *engine.Tuning {
 func Tuning() *engine.Tuning { return tuning() }
 
 var host = sync.OnceValue(func() *engine.Host {
-	return engine.NewHost(engine.HostOptions{
+	h := engine.NewHost(engine.HostOptions{
 		Dir:         layout.CastEngineDir,
 		State:       layout.CastEngineState,
-		Args:        webreceiver.EngineArgs(),
+		Quiet:       quiet,
+		ArgsFor:     engineArgs,
 		Nameservers: nameservers,
 		Network:     func(ctx context.Context) bool { return dhcp.Get().Wait(ctx) },
 		Screen: func() (int, int) {
@@ -73,9 +76,41 @@ var host = sync.OnceValue(func() *engine.Host {
 		},
 		Tuning: Tuning(),
 	})
+	restartOnQuiet(h)
+	return h
 })
 
 func Engine() *engine.Host { return host() }
+
+// quiet is whether network.internet keeps the cast engine and receiver off the lookups no feature
+// needs: "quiet" or "local".
+func quiet() bool { return network.Get().Internet().Quiet() }
+
+// restartOnQuiet restarts the engine when network.internet moves into or out of quiet, so its
+// flags and policy follow the setting without restarting lanovod.
+func restartOnQuiet(h *engine.Host) {
+	var mu sync.Mutex
+	was := quiet()
+	network.Get().Changed.Listen(func(c schema.Network) {
+		mu.Lock()
+		changed := c.Internet.Quiet() != was
+		was = c.Internet.Quiet()
+		mu.Unlock()
+		if changed {
+			slog.Info("the cast engine restarts for the internet access setting", "quiet", was)
+			h.Restart()
+		}
+	})
+}
+
+// engineArgs leaves out the web-security exceptions when quiet: only Google-hosted receiver
+// pages need them, and those cannot load without the receiver's Google lookups.
+func engineArgs(quiet bool) []string {
+	if quiet {
+		return webreceiver.LocalEngineArgs()
+	}
+	return webreceiver.EngineArgs()
+}
 
 func helper() *surface.Client { return display.Get().Helper() }
 
@@ -142,6 +177,7 @@ func build() *castreceiver.Receiver {
 				}),
 			},
 			Preferences: Preferences,
+			Cloud:       func() bool { return !quiet() },
 			Notice: func(title, body string) {
 				message.Get().Quiet(title, body, castreceiver.NoticeFor)
 			},
