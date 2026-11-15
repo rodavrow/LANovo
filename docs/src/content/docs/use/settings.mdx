@@ -55,6 +55,7 @@ The Wi‑Fi network, IP and MAC address, router and DHCP lease, all read-only. C
 | Web access → | The address of the [web page](/use/web/), the admin password, and the certificate in use | | `text.<device>_frontend_admin_password`, `sensor.<device>_frontend_certificate` |
 | Verify certificates | Check TLS certificates on downloads: updates, wake words, photos, radar | On | `switch.<device>_verify_certificates` |
 | Download through Home Assistant | For a display without internet access: updates, the cast engine, speech models and wake word packs download through Home Assistant. Needs the [EchoLocal integration](/start/integration/) and **Allow the device to perform Home Assistant actions** in the display's ESPHome integration options. Photos, radar and other downloads still go directly | Off | `switch.<device>_download_through_home_assistant` |
+| Internet access | **Open** blocks nothing. **Quiet** stops the background lookups no feature needs; **Local only** also blocks everything off the local network ([Privacy](/features/privacy/#internet-access)) | Open | `select.<device>_internet_access` |
 
 ## Connected services
 
