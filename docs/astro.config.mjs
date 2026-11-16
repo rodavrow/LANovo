@@ -90,6 +90,10 @@ export default defineConfig({
 							"slug": "features/music"
 						},
 						{
+							"label": "Video",
+							"slug": "features/video"
+						},
+						{
 							"label": "Bluetooth LE proxy",
 							"slug": "features/bluetooth"
 						},
