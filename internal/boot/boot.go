@@ -79,11 +79,15 @@ func Run(ctx context.Context) error {
 	display.Get().Stranded(DrawStranded)
 
 	group := service.New()
+	// A service that will not stop must not keep an update's restart waiting forever.
+	group.StopWithin(stopWithin)
 	component.Default().AddTo(group)
 
 	slog.Info("resident")
 	return group.Run(leaving(ctx))
 }
+
+const stopWithin = 15 * time.Second
 
 // init's ctl.restart and ctl.stop are KillProcessGroup(SIGKILL) on this release.
 var leavingWait = 2 * time.Second
