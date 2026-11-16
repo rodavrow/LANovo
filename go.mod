@@ -8,7 +8,7 @@ require (
 	github.com/go-gui-org/go-gui v0.94.0
 	github.com/spf13/cobra v1.10.2
 	github.com/ygelfand/go-esphome-device v0.0.20
-	github.com/ygelfand/libcountertop v0.1.1-0.20261115023135-22b3aac54dde
+	github.com/ygelfand/libcountertop v0.1.1-0.20261116015754-76e15cdab475
 	golang.org/x/exp/shiny v0.0.0-20260908205506-85c1c2202aba
 )
 
@@ -129,4 +129,4 @@ require (
 	rsc.io/qr v0.2.0 // indirect
 )
 
-replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261115102319-303bd91d5b3a
+replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261116071550-e44d5235ab89

@@ -11,7 +11,8 @@ var M10 = func() Board {
 	b.Diagonal = 10.1
 	b.CameraWidth, b.CameraHeight = 1920, 1080
 	b.CameraSizes = []string{"1920x1080", "1280x720", "640x480"}
-	b.CameraTurn = 2
+	b.Amp = &Chip{Bus: 1, Addr: 0x2c, Table: "m10"}
+	b.AmpPins = []int{44}
 	return b
 }()
 
