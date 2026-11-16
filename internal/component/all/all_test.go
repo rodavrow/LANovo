@@ -59,6 +59,18 @@ func TestEveryEntityLandsOnASubDeviceThatExists(t *testing.T) {
 	}
 }
 
+func TestTheVideoPlayerReportsItsStateAndPosition(t *testing.T) {
+	missing := map[string]bool{"video_state": true, "video_position": true}
+
+	for _, e := range entities(t) {
+		delete(missing, e.Object())
+	}
+
+	for object := range missing {
+		t.Errorf("the registry built no %s entity", object)
+	}
+}
+
 func TestEverySubDeviceHasSomethingOnIt(t *testing.T) {
 	count := map[uint32]int{}
 	for _, e := range entities(t) {

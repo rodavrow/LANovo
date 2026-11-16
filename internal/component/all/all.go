@@ -51,6 +51,7 @@ import (
 	_ "github.com/ygelfand/LANovo/internal/feature/thermostat"
 	_ "github.com/ygelfand/LANovo/internal/feature/timer"
 	_ "github.com/ygelfand/LANovo/internal/feature/triggers"
+	_ "github.com/ygelfand/LANovo/internal/feature/videoplay"
 	_ "github.com/ygelfand/LANovo/internal/feature/vision"
 	_ "github.com/ygelfand/LANovo/internal/feature/visuals"
 	_ "github.com/ygelfand/LANovo/internal/feature/voice"
