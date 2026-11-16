@@ -107,6 +107,30 @@ func TestRulesV4(t *testing.T) {
 	}
 }
 
+// The video player fetches from whatever port a server on the network listens on, so the default
+// allowlist must pass a private address without naming a protocol or a port.
+func TestDefaultRulesReachAPrivateServerOnAnyPort(t *testing.T) {
+	c, err := Parse(strings.NewReader(DefaultConfig))
+	if err != nil {
+		t.Fatalf("Parse(DefaultConfig) = %v", err)
+	}
+	c.Enabled = true
+	server := netip.MustParseAddr("192.168.1.85")
+
+	for line := range strings.SplitSeq(Rules(c, V4, nil), "\n") {
+		f := strings.Fields(line)
+		if len(f) == 6 && f[2] == "-d" && f[5] == "RETURN" &&
+			netip.MustParsePrefix(f[3]).Contains(server) {
+			return
+		}
+		if strings.Contains(line, "REJECT") {
+			break
+		}
+	}
+	t.Errorf("no rule before the rejects returns for %s on every port:\n%s",
+		server, Rules(c, V4, nil))
+}
+
 func TestRulesV6AddsTheDevicePrefixAndSkipsLogWhenOff(t *testing.T) {
 	c := Config{Enabled: true, Allow: []netip.Prefix{netip.MustParsePrefix("fe80::/10")}}
 	own := []netip.Prefix{netip.MustParsePrefix("2a02:a45e:45d5:20::/64")}
