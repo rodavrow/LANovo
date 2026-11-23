@@ -3,18 +3,18 @@ module github.com/ygelfand/LANovo
 go 1.27.0
 
 require (
+	charm.land/bubbles/v2 v2.0.0
+	charm.land/bubbletea/v2 v2.0.2
 	charm.land/lipgloss/v2 v2.0.6
 	github.com/charmbracelet/colorprofile v0.4.3
 	github.com/go-gui-org/go-gui v0.94.0
 	github.com/spf13/cobra v1.10.2
-	github.com/ygelfand/go-esphome-device v0.0.20
-	github.com/ygelfand/libcountertop v0.1.1-0.20261119232804-2c9417453f48
+	github.com/ygelfand/go-esphome-device v0.0.21
+	github.com/ygelfand/libcountertop v0.1.1-0.20261122164943-ad1602e31145
 	golang.org/x/exp/shiny v0.0.0-20260908205506-85c1c2202aba
 )
 
 require (
-	charm.land/bubbles/v2 v2.0.0 // indirect
-	charm.land/bubbletea/v2 v2.0.2 // indirect
 	charm.land/huh/v2 v2.0.3 // indirect
 	filippo.io/cpace v0.0.0-20210101143347-24d601e2e469 // indirect
 	github.com/Sendspin/sendspin-go v1.8.2 // indirect
@@ -29,6 +29,7 @@ require (
 	github.com/bluenviron/gohlslib/v2 v2.4.5 // indirect
 	github.com/bluenviron/mediacommon/v2 v2.9.5 // indirect
 	github.com/catppuccin/go v0.2.0 // indirect
+	github.com/charmbracelet/harmonica v0.2.0 // indirect
 	github.com/charmbracelet/ultraviolet v0.0.0-20260811164956-006e29f97886 // indirect
 	github.com/charmbracelet/x/ansi v0.11.8 // indirect
 	github.com/charmbracelet/x/exp/ordered v0.1.0 // indirect
@@ -128,4 +129,4 @@ require (
 	rsc.io/qr v0.2.0 // indirect
 )
 
-replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261119235529-7dd1812c8841
+replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261123063509-3afc4a39c3fd

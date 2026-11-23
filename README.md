@@ -19,25 +19,26 @@ through the ESPHome native API.
   <a href="https://www.lanovo.link/use/visuals/"><img src="docs/public/visuals/synthwave.webp" alt="Animated Synthwave audio visual" width="230"></a>
 </p>
 
-| Nixie clock | Hardware alarm panel |
-|:---:|:---:|
+|                                                 Nixie clock                                                  |                                                Hardware alarm panel                                                 |
+| :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------: |
 | <img src="docs/public/carousel/faces-20.png" alt="Nixie clock in the Amber theme, in landscape" width="350"> | <img src="docs/public/carousel/homealarm-6.webp" alt="Hardware alarm-panel design with rehearsal data" width="350"> |
 
-| Tessera in Neon | Photos |
-|:---:|:---:|
+|                                                Tessera in Neon                                                |                                                           Photos                                                           |
+| :-----------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
 | <img src="docs/public/carousel/styles-7.png" alt="Landscape Tessera dashboard in the Neon style" width="350"> | <img src="docs/src/assets/screens/app-photos.webp" alt="Full-screen Photos app showing a Google Photos album" width="350"> |
 
 [Interface gallery](https://www.lanovo.link/use/gallery/) · [Setup guide](https://www.lanovo.link/start/devices/) · [Releases](https://github.com/ygelfand/LANovo/releases)
 
 ## Devices
 
-| Device                  | Codename  | OS                 | Status    |
-| ----------------------- | --------- | ------------------ | --------- |
-| Lenovo Smart Display 10 | blueberry | Android Things 8.x | Supported |
-| Lenovo Smart Display 8  | amber     | Android Things 8.x | Supported |
-| Lenovo Smart Display 7  | ivy       | Android Things 8.x | Supported |
-| JBL Link View           | opal      | Android Things 8.x | Supported |
-| Lenovo ThinkSmart View  | penghu    | Android 8.x        | Supported |
+| Device                   | Codename  | OS                 | Status    |
+| ------------------------ | --------- | ------------------ | --------- |
+| Lenovo Smart Display 10  | blueberry | Android Things 8.x | Supported |
+| Lenovo Smart Display 8   | amber     | Android Things 8.x | Supported |
+| Lenovo Smart Display 7   | ivy       | Android Things 8.x | Supported |
+| JBL Link View            | opal      | Android Things 8.x | Supported |
+| Lenovo ThinkSmart View   | penghu    | Android 8.x        | Supported |
+| Lenovo Smart Clock Gen 1 | cube      | Android Things 8.x | Supported |
 
 ## Additional devices supported by our sister project [EchoLocal](https://github.com/ygelfand/echolocal)
 
@@ -175,7 +176,10 @@ or the
 [Smart Display 7](https://xdaforums.com/t/cd-17302f-lenovo-smart-display-7-ivy-avb-bootloader-unlock-firmware.4472041/)
 and flash the **Android 8.1 Debug Firmware**. The ThinkSmart View is flashed whole over EDL with
 LANovo's boot image; see [ThinkSmart View](https://www.lanovo.link/start/before/#thinksmart-view), or join the
-community on [Discord](https://discord.gg/efWnv89pg2) for help.
+community on [Discord](https://discord.gg/efWnv89pg2) for help. The Smart Clock is unlocked with its
+[XDA guide](https://xdaforums.com/t/lenovo-smart-clock-bootloader-avb-unlock-firmware-region-changer-kernel-source.4130295/)
+and installed from fastboot with `lanovo install --board cube`; see
+[Smart Clock](https://www.lanovo.link/start/before/#smart-clock).
 
 Then download `lanovo` from the [releases page](https://github.com/ygelfand/LANovo/releases):
 
