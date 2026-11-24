@@ -9,6 +9,7 @@ import (
 
 	"github.com/ygelfand/LANovo/internal/component"
 	"github.com/ygelfand/LANovo/internal/config"
+	"github.com/ygelfand/LANovo/internal/feature/avatar"
 	"github.com/ygelfand/LANovo/internal/feature/wakeword"
 )
 
@@ -21,6 +22,8 @@ var Get = sync.OnceValue(func() *sharedannouncements.Announcements {
 		Slots: wakeword.Slots,
 		Read:  func() bool { return config.Get().Wake.AnimateAnnouncements },
 		Save:  func(on bool) error { return config.Set().Announcements().Animate(on) },
+		// Opening the avatar early hides the second LiveTalking needs to start.
+		Chosen: func(slot int, on bool) { avatar.Get().Chosen(slot, on) },
 	})
 	component.Settings.Add(a.Controls())
 	return a

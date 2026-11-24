@@ -8,6 +8,7 @@ import (
 
 	"github.com/ygelfand/LANovo/internal/component"
 	"github.com/ygelfand/LANovo/internal/config"
+	"github.com/ygelfand/LANovo/internal/feature/avatar"
 	"github.com/ygelfand/LANovo/internal/feature/idle"
 	"github.com/ygelfand/LANovo/internal/feature/visuals"
 	"github.com/ygelfand/LANovo/internal/feature/voice"
@@ -38,5 +39,6 @@ var Stage = sync.OnceValue(func() *sharedscreen.Stage {
 		Display: display.Get(),
 		Visuals: visuals.Get(),
 		Wake:    config.WakeSection,
+		Avatar:  avatar.Get(),
 	})
 })

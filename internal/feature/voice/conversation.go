@@ -2,6 +2,7 @@ package voice
 
 import (
 	"context"
+	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/assistant/turn"
 	"github.com/ygelfand/libcountertop/pkg/audio/sound"
@@ -12,6 +13,7 @@ import (
 	"github.com/ygelfand/LANovo/internal/feature/activity"
 	"github.com/ygelfand/LANovo/internal/feature/announcements"
 	"github.com/ygelfand/LANovo/internal/feature/arbitration"
+	"github.com/ygelfand/LANovo/internal/feature/avatar"
 	"github.com/ygelfand/LANovo/internal/feature/feedback"
 	"github.com/ygelfand/LANovo/internal/feature/media"
 	"github.com/ygelfand/LANovo/internal/feature/privacy"
@@ -31,6 +33,11 @@ type voiceSpeaker struct{ *speaker.Speaker }
 
 func (s voiceSpeaker) Splices() uint64   { _, n, _, _ := s.Stats(); return n }
 func (s voiceSpeaker) Underruns() uint64 { _, _, n, _ := s.Stats(); return n }
+
+// QueuedFor is how long the queue takes to play; Queued counts frames at the speaker rate.
+func (s voiceSpeaker) QueuedFor() time.Duration {
+	return time.Duration(s.Queued()) * time.Second / speaker.Rate
+}
 
 type voiceSound struct{ *speaker.Driver }
 
@@ -66,6 +73,7 @@ func dependencies() turn.Dependencies {
 		Arbiter:       arbitration.Get(),
 		Voices:        voicematch.Get(),
 		Announcements: announcements.Get(),
+		Avatar:        avatar.Get(),
 	}
 }
 
