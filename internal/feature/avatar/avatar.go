@@ -3,12 +3,18 @@ package avatar
 
 import (
 	"context"
+	"slices"
 	"sync"
 	"time"
 
 	esphome "github.com/ygelfand/go-esphome-device"
 
 	sharedavatar "github.com/ygelfand/libcountertop/pkg/assistant/avatar"
+	"github.com/ygelfand/libcountertop/pkg/display/callview"
+	"github.com/ygelfand/libcountertop/pkg/display/cameraview"
+	"github.com/ygelfand/libcountertop/pkg/display/doorbellview"
+	sharedshell "github.com/ygelfand/libcountertop/pkg/display/shell"
+	"github.com/ygelfand/libcountertop/pkg/display/videopage"
 	"github.com/ygelfand/libcountertop/pkg/fetch"
 	sharedcomponent "github.com/ygelfand/libcountertop/pkg/runtime/component"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
@@ -32,20 +38,34 @@ type Avatar struct{ *sharedavatar.Avatars }
 
 var Get = sync.OnceValue(func() *Avatar {
 	return &Avatar{sharedavatar.New(sharedavatar.Options{
-		Slots:    wakeword.Slots,
-		Read:     func() schema.Wake { return config.Get().Wake },
-		Write:    func(slot int) schema.WakeWriter { return config.Set().Wake(slot) },
-		DeviceID: component.AssistantDevice,
-		Client:   fetch.Client(clipWait),
-		Display:  display.Get(),
-		// A call, or an app that covers the home screen such as a camera or a video, owns the
-		// screen; the assistant then shows its usual look.
-		VideoBusy: func() bool {
-			_, calling := call.Get().Now()
-			return calling || shell.Get().Covered()
-		},
+		Slots:     wakeword.Slots,
+		Read:      func() schema.Wake { return config.Get().Wake },
+		Write:     func(slot int) schema.WakeWriter { return config.Set().Wake(slot) },
+		DeviceID:  component.AssistantDevice,
+		Client:    fetch.Client(clipWait),
+		Display:   display.Get(),
+		VideoBusy: videoBusy,
 	})}
 })
+
+// videoBusy reports that a call or a view playing video owns the hardware video, so the
+// assistant shows its usual look. Views that only cover the home screen, such as the photo
+// screen or the music app, leave the avatar alone.
+func videoBusy() bool {
+	if _, calling := call.Get().Now(); calling {
+		return true
+	}
+	return slices.ContainsFunc(shell.Get().Views(), showsVideo)
+}
+
+func showsVideo(v sharedshell.View) bool {
+	switch v.(type) {
+	case *videopage.Page, *cameraview.Live, *cameraview.Grid, *doorbellview.Live,
+		*callview.Talk:
+		return true
+	}
+	return false
+}
 
 func (a *Avatar) Run(ctx context.Context) error {
 	a.Avatars.Run(ctx)
