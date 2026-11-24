@@ -2,6 +2,7 @@ package voice
 
 import (
 	"context"
+	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/assistant/turn"
 	"github.com/ygelfand/libcountertop/pkg/audio/sound"
@@ -32,6 +33,11 @@ type voiceSpeaker struct{ *speaker.Speaker }
 
 func (s voiceSpeaker) Splices() uint64   { _, n, _, _ := s.Stats(); return n }
 func (s voiceSpeaker) Underruns() uint64 { _, _, n, _ := s.Stats(); return n }
+
+// QueuedFor is how long the queue takes to play; Queued counts frames at the speaker rate.
+func (s voiceSpeaker) QueuedFor() time.Duration {
+	return time.Duration(s.Queued()) * time.Second / speaker.Rate
+}
 
 type voiceSound struct{ *speaker.Driver }
 
