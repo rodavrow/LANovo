@@ -11,6 +11,7 @@ import (
 	_ "github.com/ygelfand/LANovo/internal/feature/api"
 	_ "github.com/ygelfand/LANovo/internal/feature/arbitration"
 	_ "github.com/ygelfand/LANovo/internal/feature/assistant"
+	_ "github.com/ygelfand/LANovo/internal/feature/avatar"
 	_ "github.com/ygelfand/LANovo/internal/feature/bluetooth"
 	_ "github.com/ygelfand/LANovo/internal/feature/buttons"
 	_ "github.com/ygelfand/LANovo/internal/feature/call"
