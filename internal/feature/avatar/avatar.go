@@ -73,7 +73,7 @@ func (a *Avatar) Run(ctx context.Context) error {
 }
 
 func (a *Avatar) Entities() []esphome.Entity {
-	var out []esphome.Entity
+	out := a.Avatars.DeviceEntities()
 	for slot := range wakeword.Slots {
 		out = append(out, a.Avatars.Entities(slot)...)
 	}

@@ -48,6 +48,7 @@ import (
 	"github.com/ygelfand/LANovo/internal/feature/alerts"
 	"github.com/ygelfand/LANovo/internal/feature/apps"
 	"github.com/ygelfand/LANovo/internal/feature/assistant"
+	"github.com/ygelfand/LANovo/internal/feature/avatar"
 	"github.com/ygelfand/LANovo/internal/feature/calendar"
 	"github.com/ygelfand/LANovo/internal/feature/call"
 	"github.com/ygelfand/LANovo/internal/feature/cameras"
@@ -355,6 +356,7 @@ var Get = sync.OnceValue(func() *screens.App {
 			screens.On(&privacy.Get().Changed),
 			screens.On(&web.Get().Offered),
 			screens.On(&voicematch.Get().Changed),
+			screens.On(&avatar.Get().HeldChanged),
 		},
 
 		Views: append([]func(shell.View) *screens.Screen{
