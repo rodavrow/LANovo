@@ -8,6 +8,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/audio/sound"
 	sharedwake "github.com/ygelfand/libcountertop/pkg/inference/wake"
 	"github.com/ygelfand/libcountertop/pkg/inference/wakeslots"
+	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 
 	"github.com/ygelfand/LANovo/internal/config"
 	"github.com/ygelfand/LANovo/internal/feature/activity"
@@ -34,10 +35,14 @@ type voiceSpeaker struct{ *speaker.Speaker }
 func (s voiceSpeaker) Splices() uint64   { _, n, _, _ := s.Stats(); return n }
 func (s voiceSpeaker) Underruns() uint64 { _, _, n, _ := s.Stats(); return n }
 
-// QueuedFor is how long the queue takes to play; Queued counts frames at the speaker rate.
+// QueuedFor is how long the voice still queued takes to play, so the avatar's video waits for
+// the voice only, not for music queued beside it.
 func (s voiceSpeaker) QueuedFor() time.Duration {
-	return time.Duration(s.Queued()) * time.Second / speaker.Rate
+	return time.Duration(s.Lane(schema.StreamVoice).Queued()) * time.Second / speaker.Rate
 }
+
+// Drain drops only the queued voice, so stopping an avatar reply leaves music and chimes alone.
+func (s voiceSpeaker) Drain() { s.Lane(schema.StreamVoice).Drain() }
 
 type voiceSound struct{ *speaker.Driver }
 
