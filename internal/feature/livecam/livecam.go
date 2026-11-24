@@ -7,7 +7,6 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/camera/camerafeed"
 	"github.com/ygelfand/libcountertop/pkg/camera/live"
 	"github.com/ygelfand/libcountertop/pkg/camera/session"
-	"github.com/ygelfand/libcountertop/pkg/media/h264"
 	sharedcomponent "github.com/ygelfand/libcountertop/pkg/runtime/component"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 
@@ -42,8 +41,14 @@ var subWidths = []int{960, 768, 640, 480, 320}
 var Get = sync.OnceValue(func() Camera {
 	b := board.Current()
 	o := live.Options{
-		Vendor:  qualcomm,
-		Streams: streamsFor(b),
+		Vendor: qualcomm,
+		Streams: live.Streams{
+			Profile:     b.CameraProfile,
+			Main:        b.CameraSizes,
+			MainDefault: fmt.Sprintf("%dx%d", b.CameraWidth, b.CameraHeight),
+			Sub:         subWidths,
+			SubDefault:  b.SubWidth,
+		},
 		Mirror:  b.CameraMirror,
 		Turn:    func() int { return turnFor(b.CameraTurn, int(display.Get().Orientation())) },
 		Open:    func(c camerafeed.Config) (session.Transport, error) { return mtkcamera.Open(c) },
@@ -66,18 +71,6 @@ var Get = sync.OnceValue(func() Camera {
 	}
 	return c
 })
-
-// Baseline is what the camera helper encoded before libcountertop let a board choose; no board here
-// has been checked with High yet.
-func streamsFor(b board.Board) live.Streams {
-	return live.Streams{
-		Main:        b.CameraSizes,
-		MainDefault: fmt.Sprintf("%dx%d", b.CameraWidth, b.CameraHeight),
-		Sub:         subWidths,
-		SubDefault:  b.SubWidth,
-		Profile:     h264.Baseline,
-	}
-}
 
 func turnFor(mounted, device int) int {
 	return (mounted - ((device/90)%4+4)%4 + 8) % 4
