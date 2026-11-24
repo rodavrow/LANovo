@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/ygelfand/libcountertop/pkg/camera/live"
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 
 	"github.com/ygelfand/LANovo/internal/board"
 )
@@ -29,6 +30,16 @@ func TestEveryCameraNameIsTranslated(t *testing.T) {
 					t.Errorf("%s: %s option %q has no text: %q", name, s.Name, o.Value, got)
 				}
 			}
+		}
+	}
+}
+
+// The camera helper refuses to open a stream with any other profile, and Baseline is what it
+// encoded before the profile became a choice.
+func TestEveryBoardStreamsBaselineH264(t *testing.T) {
+	for _, b := range board.All() {
+		if got := streamsFor(b).Profile; got != h264.Baseline {
+			t.Errorf("%s: streams H.264 %s, want %s", b.Name, got, h264.Baseline)
 		}
 	}
 }
