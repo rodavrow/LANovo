@@ -57,6 +57,7 @@ func build() *Voice {
 	slog.Info("wake words", "ours", len(ours), "slots", slots)
 
 	wakeword.Requested.Listen(v.Start)
+	media.Announcing.Listen(v.Turn().Spoken)
 
 	return v
 }

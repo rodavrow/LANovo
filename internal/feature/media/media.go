@@ -9,6 +9,7 @@ import (
 
 	esphome "github.com/ygelfand/go-esphome-device"
 
+	"github.com/ygelfand/libcountertop/pkg/hook"
 	"github.com/ygelfand/libcountertop/pkg/media/mediaplayer"
 	"github.com/ygelfand/libcountertop/pkg/media/noiselayer"
 	sharedcomponent "github.com/ygelfand/libcountertop/pkg/runtime/component"
@@ -26,6 +27,9 @@ func init() {
 	component.Register(sharedcomponent.Device, Get, sharedcomponent.Order(35),
 		sharedcomponent.Supervise(service.Restart(5*time.Second, time.Minute)))
 }
+
+// Announcing tells when an announcement that is speech starts and ends on the media player.
+var Announcing hook.Hook[bool]
 
 type Player struct {
 	*mediaplayer.Player[*speaker.Speaker]
@@ -50,6 +54,8 @@ func Get() *Player {
 			Volume:   mediaVolume{},
 			Changed:  shared.refresh,
 			Device:   component.DevicePlayback,
+
+			Announcing: Announcing.Emit,
 		})
 		shared.layers = noiselayer.New(shared.Stream(), component.DevicePlayback)
 		volume.Get().Watch(config.StreamMedia, func(int) { shared.Changed() })

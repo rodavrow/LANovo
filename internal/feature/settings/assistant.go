@@ -6,6 +6,7 @@ import (
 	sharedha "github.com/ygelfand/libcountertop/pkg/homeassistant"
 
 	"github.com/ygelfand/LANovo/internal/config"
+	"github.com/ygelfand/LANovo/internal/feature/announcements"
 	"github.com/ygelfand/LANovo/internal/feature/arbitration"
 	"github.com/ygelfand/LANovo/internal/feature/detect"
 	"github.com/ygelfand/LANovo/internal/feature/homeassistant"
@@ -46,6 +47,8 @@ func assistantPages() *sharedsettings.AssistantPages {
 			Look:       lookPages(),
 			Shell:      shell.Get(),
 			VoiceMatch: panel.Get().Page,
+
+			Announcements: announcements.Get(),
 		},
 	)
 }
