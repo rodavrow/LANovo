@@ -32,6 +32,8 @@ func TestRC(t *testing.T) {
 				"service lanovo_egress /system/bin/lanovod egress apply\n",
 				"    seclabel u:r:su:s0\n    disabled\n    oneshot\n",
 				"on property:init.svc.netd=running\n    start lanovo_egress\n",
+				"mount tmpfs tmpfs /data/misc/lanovo/engine-state/tmp nosuid nodev " +
+					"mode=0700,uid=0,gid=0,size=192m\n",
 			},
 			absent: []string{"ro.logd.auditd", "lanovo_widevine"},
 		},
