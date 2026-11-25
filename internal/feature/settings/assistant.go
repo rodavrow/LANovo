@@ -8,6 +8,7 @@ import (
 	"github.com/ygelfand/LANovo/internal/config"
 	"github.com/ygelfand/LANovo/internal/feature/announcements"
 	"github.com/ygelfand/LANovo/internal/feature/arbitration"
+	"github.com/ygelfand/LANovo/internal/feature/captions"
 	"github.com/ygelfand/LANovo/internal/feature/detect"
 	"github.com/ygelfand/LANovo/internal/feature/homeassistant"
 	"github.com/ygelfand/LANovo/internal/feature/shell"
@@ -49,6 +50,7 @@ func assistantPages() *sharedsettings.AssistantPages {
 			VoiceMatch: panel.Get().Page,
 
 			Announcements: announcements.Get(),
+			Captions:      captions.Get(),
 		},
 	)
 }
