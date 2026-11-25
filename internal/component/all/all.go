@@ -8,6 +8,7 @@ import (
 	_ "github.com/ygelfand/LANovo/internal/feature/airplay"
 	_ "github.com/ygelfand/LANovo/internal/feature/alarm"
 	_ "github.com/ygelfand/LANovo/internal/feature/announcements"
+	_ "github.com/ygelfand/LANovo/internal/feature/captions"
 	_ "github.com/ygelfand/LANovo/internal/feature/api"
 	_ "github.com/ygelfand/LANovo/internal/feature/arbitration"
 	_ "github.com/ygelfand/LANovo/internal/feature/assistant"

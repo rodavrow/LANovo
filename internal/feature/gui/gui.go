@@ -52,6 +52,7 @@ import (
 	"github.com/ygelfand/LANovo/internal/feature/calendar"
 	"github.com/ygelfand/LANovo/internal/feature/call"
 	"github.com/ygelfand/LANovo/internal/feature/cameras"
+	"github.com/ygelfand/LANovo/internal/feature/captions"
 	"github.com/ygelfand/LANovo/internal/feature/chromecast"
 	"github.com/ygelfand/LANovo/internal/feature/commands"
 	"github.com/ygelfand/LANovo/internal/feature/configsync"
@@ -283,6 +284,7 @@ var Get = sync.OnceValue(func() *screens.App {
 		Messages:  message.Get(),
 		Assistant: assistant.Get(),
 		Stage:     assistant.Stage(),
+		Captions:  captions.Get().On,
 		Badge:     panel.People().Badge,
 		Timers:    timer.Get(),
 		Poster:    poster.Get(),
