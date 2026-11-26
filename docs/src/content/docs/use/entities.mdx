@@ -62,6 +62,7 @@ Each assistant has its own set, on its own sub-device. `N` is 1 or 2.
 | `text.<device>_assistant_N_avatar_id` | Avatar ID | Which avatar; empty is the server's default | Letters, digits, `_`, `-` | |
 | `select.<device>_assistant_N_avatar_connection` | Avatar connection | When the avatar's session is open | Always connected, Connect when woken | Connect when woken |
 | `sensor.<device>_assistant_N_avatar_session`, `sensor.<device>_assistant_N_avatar_state` | Avatar session, Avatar state | The LiveTalking session and how it is doing (diagnostic) | | |
+| `switch.<device>_assistant_N_avatar_fed_by_home_assistant` | Avatar fed by Home Assistant | Home Assistant streams this assistant's replies into the avatar's session ([Avatar mode](/features/voice/#avatar-mode)) | On, Off | Off |
 
 The wake word and the Assist pipeline are picked with Home Assistant's own selects on the same
 device.
