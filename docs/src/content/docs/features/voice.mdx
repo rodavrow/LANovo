@@ -194,6 +194,7 @@ with these entities on the assistant's sub-device. `N` is 1 or 2.
 | `select.<device>_assistant_N_avatar_connection` | **Connect when woken** (default) or **Always connected** |
 | `sensor.<device>_assistant_N_avatar_session` | The display's current LiveTalking session (diagnostic) |
 | `sensor.<device>_assistant_N_avatar_state` | `off`, `connecting`, `connected` or `failed` (diagnostic) |
+| `switch.<device>_assistant_N_avatar_fed_by_home_assistant` | Home Assistant streams replies into the avatar's session itself (off by default) |
 
 On the display itself, `switch.<device>_avatar_hold` keeps the avatar that last spoke on screen
 between announcements, idle and without captions, instead of going back to the screen before.
@@ -206,7 +207,13 @@ switch is off at every start and turns itself off a minute after the last announ
   announcement assistant** names the assistant. **Always connected** keeps it open, so the
   avatar is there at once.
 - An assistant in avatar mode takes the whole reply before it speaks, even when its reply
-  delivery is set to stream, because LiveTalking speaks a file.
+  delivery is set to stream, because LiveTalking speaks a file. The exception is **Avatar fed by
+  Home Assistant**, below.
+- With **Avatar fed by Home Assistant** on, the Voice Assistant Manager streams the reply into
+  the avatar's session as it is made, so the avatar starts speaking sooner. The display follows
+  that stream and keeps the reply's audio as a backup. If the stream breaks off, the display
+  speaks the rest of the reply itself, from shortly before where the avatar stopped. A reply
+  Home Assistant doesn't stream, such as one it already had cached, goes to the avatar as usual.
 - While the avatar's picture is coming up, for up to a second, the display shows the captions
   only. The usual look shows if the picture takes longer, during a call or while a video app
   covers the home screen, and for the rest of a turn if the avatar's picture stalls.
