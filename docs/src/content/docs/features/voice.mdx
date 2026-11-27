@@ -212,7 +212,9 @@ switch is off at every start and turns itself off a minute after the last announ
 - With **Avatar fed by Home Assistant** on, the Voice Assistant Manager streams the reply into
   the avatar's session as it is made, so the avatar starts speaking sooner. The display follows
   that stream and keeps the reply's audio as a backup. If the stream breaks off, the display
-  speaks the rest of the reply itself, from shortly before where the avatar stopped. A reply
+  speaks the rest of the reply itself, from shortly before where the avatar stopped. A pause
+  that LiveTalking reports as holding, such as while the assistant searches the web, doesn't
+  count as the stream breaking off: the avatar stays on and carries on after it. A reply
   Home Assistant doesn't stream, such as one it already had cached, goes to the avatar as usual.
 - While the avatar's picture is coming up, for up to a second, the display shows the captions
   only. The usual look shows if the picture takes longer, during a call or while a video app
